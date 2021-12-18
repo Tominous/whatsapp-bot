@@ -72,10 +72,10 @@ module.exports = msgHandler = async (client, message) => {
         const isUrl = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/gi)
         if (!isGroupMsg && command.startsWith('!')) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(msgs(command)), 'from', color(pushname))
         if (isGroupMsg && command.startsWith('!')) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(msgs(command)), 'from', color(pushname), 'in', color(formattedTitle))
-        //if (!isGroupMsg && !command.startsWith('!')) console.log('\x1b[1;33m~\x1b[1;37m>', '[\x1b[1;31mMSG\x1b[1;37m]', time, color(body), 'from', color(pushname))
-        //if (isGroupMsg && !command.startsWith('!')) console.log('\x1b[1;33m~\x1b[1;37m>', '[\x1b[1;31mMSG\x1b[1;37m]', time, color(body), 'from', color(pushname), 'in', color(formattedTitle))
+        if (!isGroupMsg && !command.startsWith('!')) console.log('\x1b[1;33m~\x1b[1;37m>', '[\x1b[1;31mMSG\x1b[1;37m]', time, color(body), 'from', color(pushname))
+        if (isGroupMsg && !command.startsWith('!')) console.log('\x1b[1;33m~\x1b[1;37m>', '[\x1b[1;31mMSG\x1b[1;37m]', time, color(body), 'from', color(pushname), 'in', color(formattedTitle))
         if (isBlocked) return
-        //if (!isOwner) return
+        if (!isOwner) return
         switch(command) {
         case '!sticker':
         case '!stiker':
@@ -193,7 +193,7 @@ module.exports = msgHandler = async (client, message) => {
                     if (Number(filesize.split(' MB')[0]) >= 30.00) return client.reply(from, 'Maaf durasi video sudah melebihi batas maksimal!', id)
                     client.sendFileFromUrl(from, thumb, 'thumb.jpg', `➸ *Title* : ${title}\n➸ *Filesize* : ${filesize}\n\nSilahkan tunggu sebentar proses pengiriman file membutuhkan waktu beberapa menit.`, id)
                     await client.sendFileFromUrl(from, result, `${title}.mp3`, '', id).catch(() => client.reply(from, mess.error.Yt3, id))
-                    //await client.sendAudio(from, result, id)
+                    await client.sendAudio(from, result, id)
                 }
             } catch (err) {
                 client.sendText(ownerNumber[0], 'Error ytmp3 : '+ err)
@@ -324,7 +324,7 @@ module.exports = msgHandler = async (client, message) => {
             client.sendFileFromUrl(from, animek.thumb, 'kusonime.jpg', res_animek, id)
             break
         case '!nh':
-            //if (isGroupMsg) return client.reply(from, 'Sorry this command for private chat only!', id)
+            if (isGroupMsg) return client.reply(from, 'Sorry this command for private chat only!', id)
             if (args.length === 2) {
                 const nuklir = body.split(' ')[1]
                 client.reply(from, mess.wait, id)
@@ -339,11 +339,11 @@ module.exports = msgHandler = async (client, message) => {
                         const { title, details, link } = dojin
                         const { parodies, tags, artists, groups, languages, categories } = await details
                         var teks = `*Title* : ${title}\n\n*Parodies* : ${parodies}\n\n*Tags* : ${tags.join(', ')}\n\n*Artists* : ${artists.join(', ')}\n\n*Groups* : ${groups.join(', ')}\n\n*Languages* : ${languages.join(', ')}\n\n*Categories* : ${categories}\n\n*Link* : ${link}`
-                        //exec('nhentai --id=' + nuklir + ` -P mantap.pdf -o ./hentong/${nuklir}.pdf --format `+ `${nuklir}.pdf`, (error, stdout, stderr) => {
+                        exec('nhentai --id=' + nuklir + ` -P mantap.pdf -o ./hentong/${nuklir}.pdf --format `+ `${nuklir}.pdf`, (error, stdout, stderr) => {
                         client.sendFileFromUrl(from, pic, 'hentod.jpg', teks, id)
-                            //client.sendFile(from, `./hentong/${nuklir}.pdf/${nuklir}.pdf.pdf`, then(() => `${title}.pdf`, '', id)).catch(() => 
-                            //client.sendFile(from, `./hentong/${nuklir}.pdf/${nuklir}.pdf.pdf`, `${title}.pdf`, '', id))
-                            /*if (error) {
+                            client.sendFile(from, `./hentong/${nuklir}.pdf/${nuklir}.pdf.pdf`, then(() => `${title}.pdf`, '', id)).catch(() => 
+                            client.sendFile(from, `./hentong/${nuklir}.pdf/${nuklir}.pdf.pdf`, `${title}.pdf`, '', id))
+                            if (error) {
                                 console.log('error : '+ error.message)
                                 return
                             }
@@ -351,8 +351,8 @@ module.exports = msgHandler = async (client, message) => {
                                 console.log('stderr : '+ stderr)
                                 return
                             }
-                            console.log('stdout : '+ stdout)*/
-                            //})
+                            console.log('stdout : '+ stdout)
+                            })
                     } catch (err) {
                         client.reply(from, '[❗] Terjadi kesalahan, mungkin kode nuklir salah', id)
                     }
@@ -781,6 +781,6 @@ module.exports = msgHandler = async (client, message) => {
         }
     } catch (err) {
         console.log(color('[ERROR]', 'red'), err)
-        //client.kill().then(a => console.log(a))
+        client.kill().then(a => console.log(a))
     }
 }
