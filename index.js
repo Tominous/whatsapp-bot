@@ -35,10 +35,10 @@ const start = async (client = new Client()) => {
             }
         }))
 
-        /*client.onAck((x => {
+        client.onAck((x => {
             const { from, to, ack } = x
             if (x !== 3) client.sendSeen(to)
-        }))*/
+        }))
 
         // listening on Incoming Call
         client.onIncomingCall(( async (call) => {
